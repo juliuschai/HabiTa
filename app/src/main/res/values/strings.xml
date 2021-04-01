@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">HabiTa</string>
+
+    <string name="addBtn">Add</string>
+
+    <string name="habit_name">Habit Name</string>
+
+    <string name="occurrence_daily">Daily</string>
+    <string name="occurrence_weekday">Weekday</string>
+    <string name="occurrence_weekend">Weekend</string>
+
+    <string name="day_of_week_mon_short">MON</string>
+    <string name="day_of_week_mon">Monday</string>
+    <string name="day_of_week_tue_short">TUE</string>
+    <string name="day_of_week_tue">Tuesday</string>
+    <string name="day_of_week_wed_short">WED</string>
+    <string name="day_of_week_wed">Wednesday</string>
+    <string name="day_of_week_thu_short">THU</string>
+    <string name="day_of_week_thu">Thursday</string>
+    <string name="day_of_week_fri_short">FRI</string>
+    <string name="day_of_week_fri">Friday</string>
+    <string name="day_of_week_sat_short">SAT</string>
+    <string name="day_of_week_sat">Saturday</string>
+    <string name="day_of_week_sun_short">SUN</string>
+    <string name="day_of_week_sun">Sunday</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="cancel">cancel</string>
+</resources>

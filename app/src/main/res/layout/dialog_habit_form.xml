@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/habitNameEditTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:autofillHints="Name of habit you want to remind"
+        android:ems="10"
+        android:hint="@string/habit_name"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.52"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/radioGroupOccurrence"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/habitNameEditTxt">
+
+        <RadioButton
+            android:id="@+id/radioDaily"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="@string/occurrence_daily" />
+
+        <RadioButton
+            android:id="@+id/radioWeekday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/occurrence_weekday" />
+
+        <RadioButton
+            android:id="@+id/radioWeekend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/occurrence_weekend" />
+
+    </RadioGroup>
+
+    <LinearLayout
+        android:id="@+id/linLayoutDayOfWeek"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroupOccurrence">
+
+        <ToggleButton
+            android:id="@+id/monBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/circle_toggle_button_bg"
+            android:minWidth="48dp"
+            android:text="@string/day_of_week_mon_short"
+            android:textColor="@drawable/circle_toggle_button_txt"
+            android:textOff="@string/day_of_week_mon_short"
+            android:textOn="@string/day_of_week_mon_short" />
+
+        <ToggleButton
+            android:id="@+id/tueBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/circle_toggle_button_bg"
+            android:minWidth="48dp"
+            android:text="@string/day_of_week_tue_short"
+            android:textColor="@drawable/circle_toggle_button_txt"
+            android:textOff="@string/day_of_week_tue_short"
+            android:textOn="@string/day_of_week_tue_short" />
+
+        <ToggleButton
+            android:id="@+id/wedBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/circle_toggle_button_bg"
+            android:minWidth="48dp"
+            android:text="@string/day_of_week_wed_short"
+            android:textColor="@drawable/circle_toggle_button_txt"
+            android:textOff="@string/day_of_week_wed_short"
+            android:textOn="@string/day_of_week_wed_short" />
+
+        <ToggleButton
+            android:id="@+id/thuBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/circle_toggle_button_bg"
+            android:minWidth="48dp"
+            android:text="@string/day_of_week_thu_short"
+            android:textColor="@drawable/circle_toggle_button_txt"
+            android:textOff="@string/day_of_week_thu_short"
+            android:textOn="@string/day_of_week_thu_short" />
+
+        <ToggleButton
+            android:id="@+id/friBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/circle_toggle_button_bg"
+            android:minWidth="48dp"
+            android:text="@string/day_of_week_fri_short"
+            android:textColor="@drawable/circle_toggle_button_txt"
+            android:textOff="@string/day_of_week_fri_short"
+            android:textOn="@string/day_of_week_fri_short" />
+
+        <ToggleButton
+            android:id="@+id/satBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/circle_toggle_button_bg"
+            android:minWidth="48dp"
+            android:text="@string/day_of_week_sat_short"
+            android:textColor="@drawable/circle_toggle_button_txt"
+            android:textOff="@string/day_of_week_sat_short"
+            android:textOn="@string/day_of_week_sat_short" />
+
+        <ToggleButton
+            android:id="@+id/sunBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/circle_toggle_button_bg"
+            android:minWidth="48dp"
+            android:text="@string/day_of_week_sun_short"
+            android:textColor="@drawable/circle_toggle_button_txt"
+            android:textOff="@string/day_of_week_sun_short"
+            android:textOn="@string/day_of_week_sun_short" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
