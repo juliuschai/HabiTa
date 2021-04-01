@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -14,6 +15,7 @@ public class MainActivity extends AppCompatActivity
     private HabitFormDialogFragment dialog;
     private final HabitManager habitManager = HabitManager.getInstance();
     private List<Habit> habits;
+    private HabitsAdapter habitsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +27,8 @@ public class MainActivity extends AppCompatActivity
         RecyclerView recyclerView = findViewById(R.id.recycler);
         recyclerView.setHasFixedSize(true);
 
-        HabitsAdapter habitsAdapter = new HabitsAdapter(habits, this);
+        habitsAdapter = new HabitsAdapter(habits, this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(habitsAdapter);
     }
 
@@ -48,6 +51,7 @@ public class MainActivity extends AppCompatActivity
     public void onDialogPositiveClicked(HabitFormDialogFragment mDialog) {
         Habit habit = mDialog.getHabit();
         this.habits = habitManager.add(habit);
+        habitsAdapter.notifyDataSetChanged();
     }
 
     @Override

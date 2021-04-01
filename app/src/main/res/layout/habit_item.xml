@@ -111,6 +111,7 @@
                     android:background="@drawable/circle_toggle_button_bg"
                     android:minWidth="48dp"
                     android:text="@string/day_of_week_sun_short"
+                    android:textColor="@drawable/circle_toggle_button_txt"
                     android:textOff="@string/day_of_week_sun_short"
                     android:textOn="@string/day_of_week_sun_short" />
 

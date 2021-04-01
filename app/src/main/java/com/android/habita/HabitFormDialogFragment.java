@@ -46,6 +46,60 @@ public class HabitFormDialogFragment extends DialogFragment {
         this.habit = habit;
     }
 
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        // Get the layout inflater
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+
+        // Build custom view
+        final View view = inflater.inflate(R.layout.dialog_habit_form,null);
+
+        TextView habitNameTxt = view.findViewById(R.id.habitNameEditTxt);
+
+        habitNameTxt.setText(habit.getName());
+        updateToggleButtons(view);
+        updateRadOccurrence(view);
+
+        ((RadioGroup) view.findViewById(R.id.radioGroupOccurrence)).setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                onOccurrenceRadGroupClicked(group);
+            }
+        });
+
+        List<Integer> dayBtnIds = Arrays.asList(R.id.monBtn, R.id.tueBtn, R.id.wedBtn,
+                R.id.thuBtn, R.id.friBtn, R.id.satBtn, R.id.sunBtn);
+
+        for (Integer dayBtnId: dayBtnIds) {
+            view.findViewById(dayBtnId).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onDaysToggleBtnClicked((View) v.getParent());
+                }
+            });
+        }
+
+        // Inflate and set the layout for the dialog
+        // Pass null as the parent view because its going in the dialog layout
+        builder.setView(view)
+                // Add action buttons
+                .setPositiveButton(R.string.addBtn, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        habit.setName(((TextView) view.findViewById(R.id.habitNameEditTxt)).getText().toString());
+                        mListener.onDialogPositiveClicked(HabitFormDialogFragment.this);
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        mListener.onDialogNegativeClicked(HabitFormDialogFragment.this);
+                    }
+                });
+        return builder.create();
+    }
+
     public void onDaysToggleBtnClicked(View view) {
         view = (View) view.getParent();
         List<ToggleButton> buttons = getButtons(view);
@@ -70,80 +124,23 @@ public class HabitFormDialogFragment extends DialogFragment {
 
     public void onOccurrenceRadGroupClicked(View view) {
         view = (View) view.getParent();
-        List<ToggleButton> buttons = getButtons(view);
 
         RadioGroup radioGroup = view.findViewById(R.id.radioGroupOccurrence);
         int selectedId = radioGroup.getCheckedRadioButtonId();
 
         if (selectedId == R.id.radioDaily) {
             habit.setDays(new HashSet<>(OccurrenceUtil.getCollDaily()));
-            OccurrenceUtil.toButtons(habit.getDays(), buttons);
         } else if (selectedId == R.id.radioWeekday) {
             habit.setDays(new HashSet<>(OccurrenceUtil.getCollWeekday()));
-            OccurrenceUtil.toButtons(habit.getDays(), buttons);
         } else if (selectedId == R.id.radioWeekend) {
             habit.setDays(new HashSet<>(OccurrenceUtil.getCollWeekend()));
-            OccurrenceUtil.toButtons(habit.getDays(), buttons);
         }
 
+        updateToggleButtons(view);
     }
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        // Get the layout inflater
-        LayoutInflater inflater = requireActivity().getLayoutInflater();
-
-        // Build custom view
-        final View view = inflater.inflate(R.layout.dialog_habit_form,null);
-
-        TextView habitNameTxt = view.findViewById(R.id.habitNameEditTxt);
-        habitNameTxt.setText(habit.getName());
-        updateRadOccurrence(view);
-
-        ((RadioGroup) view.findViewById(R.id.radioGroupOccurrence)).setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                onOccurrenceRadGroupClicked(group);
-            }
-        });
-
-//        view.findViewById(R.id.linLayoutDayOfWeek).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                onDaysToggleBtnClicked(v);
-//            }
-//        });
-        List<Integer> dayBtnIds = Arrays.asList(R.id.monBtn, R.id.tueBtn, R.id.wedBtn,
-                R.id.thuBtn, R.id.friBtn, R.id.satBtn, R.id.sunBtn);
-
-        for (Integer dayBtnId: dayBtnIds) {
-            view.findViewById(dayBtnId).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onDaysToggleBtnClicked((View) v.getParent());
-                }
-            });
-        }
-
-        // Inflate and set the layout for the dialog
-        // Pass null as the parent view because its going in the dialog layout
-        builder.setView(view)
-            // Add action buttons
-            .setPositiveButton(R.string.addBtn, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int id) {
-                    habit.setName(((TextView) view.findViewById(R.id.habitNameEditTxt)).getText().toString());
-                    mListener.onDialogPositiveClicked(HabitFormDialogFragment.this);
-                }
-            })
-            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    mListener.onDialogNegativeClicked(HabitFormDialogFragment.this);
-                }
-            });
-        return builder.create();
+    private void updateToggleButtons(View view) {
+        OccurrenceUtil.toButtons(habit.getDays(), getButtons(view));
     }
 
     public List<ToggleButton> getButtons(View view) {
