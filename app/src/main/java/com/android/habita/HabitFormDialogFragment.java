@@ -3,7 +3,6 @@ package com.android.habita;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +14,9 @@ import android.widget.ToggleButton;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -22,6 +24,7 @@ import java.util.List;
 
 public class HabitFormDialogFragment extends DialogFragment {
     private final Habit habit;
+    private TextView habitTimeTxt;
 
     public Habit getHabit() {
         return habit;
@@ -31,6 +34,8 @@ public class HabitFormDialogFragment extends DialogFragment {
      * implement this interface in order to receive event callbacks.
      * Each method passes the DialogFragment in case the host needs to query it. */
     public interface IListener {
+        /* On habit dialog clicked "save" button
+        * */
         void onDialogPositiveClicked(HabitFormDialogFragment dialog);
         void onDialogNegativeClicked(HabitFormDialogFragment dialog);
     }
@@ -56,47 +61,41 @@ public class HabitFormDialogFragment extends DialogFragment {
         // Build custom view
         final View view = inflater.inflate(R.layout.dialog_habit_form,null);
 
+        // set values
         TextView habitNameTxt = view.findViewById(R.id.habitNameEditTxt);
-
         habitNameTxt.setText(habit.getName());
+
+        if (habit.getTime() != null) {
+            habitTimeTxt = view.findViewById(R.id.habitTime);
+            DateTimeFormatter dtfOut = DateTimeFormat.forPattern("HH:mm");
+            habitTimeTxt.setText(dtfOut.print(habit.getTime()));
+        }
         updateToggleButtons(view);
         updateRadOccurrence(view);
 
-        ((RadioGroup) view.findViewById(R.id.radioGroupOccurrence)).setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                onOccurrenceRadGroupClicked(group);
-            }
-        });
+        ((RadioGroup) view.findViewById(R.id.radioGroupOccurrence)).setOnCheckedChangeListener((group, checkedId) -> onOccurrenceRadGroupClicked(group));
 
         List<Integer> dayBtnIds = Arrays.asList(R.id.monBtn, R.id.tueBtn, R.id.wedBtn,
                 R.id.thuBtn, R.id.friBtn, R.id.satBtn, R.id.sunBtn);
 
         for (Integer dayBtnId: dayBtnIds) {
-            view.findViewById(dayBtnId).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onDaysToggleBtnClicked((View) v.getParent());
-                }
-            });
+            view.findViewById(dayBtnId).setOnClickListener(v -> onDaysToggleBtnClicked((View) v.getParent()));
         }
 
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
         builder.setView(view)
                 // Add action buttons
-                .setPositiveButton(R.string.addBtn, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        habit.setName(((TextView) view.findViewById(R.id.habitNameEditTxt)).getText().toString());
-                        mListener.onDialogPositiveClicked(HabitFormDialogFragment.this);
-                    }
+                .setPositiveButton(R.string.saveBtn, (dialog, id) -> {
+                    // Set habit.name
+                    habit.setName(((TextView) view.findViewById(R.id.habitNameEditTxt)).getText().toString());
+                    // Set habit.time
+                    String timeStr = ((TextView) view.findViewById(R.id.habitTime)).getText().toString();
+                    DateTimeFormatter source = DateTimeFormat.forPattern("HH:mm");
+                    habit.setTime(source.parseLocalTime(timeStr));
+                    mListener.onDialogPositiveClicked(HabitFormDialogFragment.this);
                 })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        mListener.onDialogNegativeClicked(HabitFormDialogFragment.this);
-                    }
-                });
+                .setNegativeButton(R.string.cancel, (dialog, id) -> mListener.onDialogNegativeClicked(HabitFormDialogFragment.this));
         return builder.create();
     }
 
@@ -146,13 +145,13 @@ public class HabitFormDialogFragment extends DialogFragment {
     public List<ToggleButton> getButtons(View view) {
         List<ToggleButton> buttons = new ArrayList<>();
 
-        buttons.add( (ToggleButton) view.findViewById(R.id.monBtn) );
-        buttons.add( (ToggleButton) view.findViewById(R.id.tueBtn) );
-        buttons.add( (ToggleButton) view.findViewById(R.id.wedBtn) );
-        buttons.add( (ToggleButton) view.findViewById(R.id.thuBtn) );
-        buttons.add( (ToggleButton) view.findViewById(R.id.friBtn) );
-        buttons.add( (ToggleButton) view.findViewById(R.id.satBtn) );
-        buttons.add( (ToggleButton) view.findViewById(R.id.sunBtn) );
+        buttons.add(view.findViewById(R.id.monBtn));
+        buttons.add(view.findViewById(R.id.tueBtn));
+        buttons.add(view.findViewById(R.id.wedBtn));
+        buttons.add(view.findViewById(R.id.thuBtn));
+        buttons.add(view.findViewById(R.id.friBtn));
+        buttons.add(view.findViewById(R.id.satBtn));
+        buttons.add(view.findViewById(R.id.sunBtn));
 
         return buttons;
     }
