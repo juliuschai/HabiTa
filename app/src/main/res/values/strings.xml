@@ -47,4 +47,5 @@
     <string name="success">success</string>
     <string name="title_activity_history_view">HistoryView</string>
     <string name="addBtn">Add</string>
+    <string name="open_history_view">Open History View</string>
 </resources>

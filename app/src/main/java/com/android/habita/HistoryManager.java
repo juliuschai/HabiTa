@@ -45,8 +45,10 @@ public class HistoryManager {
             reader = new JsonReader(new FileReader(file));
             histories = gson.fromJson(reader, new TypeToken<Map<String, History>>(){}.getType());
         } catch (FileNotFoundException e) {
-            histories = new HashMap<>();
+            histories = null;
         }
+        if (histories == null) histories = new HashMap<>();
+
         return histories;
     }
 

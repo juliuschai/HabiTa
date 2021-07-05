@@ -1,6 +1,7 @@
 package com.android.habita;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -114,4 +115,9 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    public void onHistoryBtnClicked(View view) {
+        Intent intent = new Intent(this, HistoryActivity.class);
+
+        startActivity(intent);
+    }
 }

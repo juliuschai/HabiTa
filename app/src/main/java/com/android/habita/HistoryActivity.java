@@ -32,7 +32,7 @@ public class HistoryActivity extends AppCompatActivity implements HistoryActivit
             historiesArr[0] = history;
         }
 
-        RecyclerView recyclerView = findViewById(R.id.recycler);
+        RecyclerView recyclerView = findViewById(R.id.historyRecycler);
         recyclerView.setHasFixedSize(true);
 
         HistoriesAdapter historiesAdapter = new HistoriesAdapter(historiesArr, this);
