@@ -50,7 +50,7 @@ public class HabitManager {
 
     private void read(Context context) {
 //        List<Habit> result = new ArrayList<>();
-//
+
 //        Habit habit1 = new Habit();
 //        habit1.setName("Test");
 //        habit1.setTime(LocalTime.parse("07:00:00"));
@@ -58,8 +58,7 @@ public class HabitManager {
 //        days1.add(DayOfWeek.MONDAY);
 //        habit1.setDays(days1);
 //        result.add(habit1);
-//
-//new FileReader(new File(context.getApplicationInfo().dataDir, FILENAME)).read()
+//        new FileReader(new File(context.getApplicationInfo().dataDir, FILENAME)).read()
         try {
 //            File file = new File(context.getApplicationInfo().dataDir, FILENAME);
 //            JsonReader reader = new JsonReader(new FileReader(file));

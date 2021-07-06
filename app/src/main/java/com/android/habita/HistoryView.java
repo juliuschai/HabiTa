@@ -30,12 +30,15 @@ public class HistoryView extends AppCompatActivity {
         Map<String, History> histories = HistoryManager.readFromJSON(this);
         History history = histories.get(historyName);
 
-        RecyclerView recyclerView = findViewById(R.id.recycler);
+        TextView habitTxt = findViewById(R.id.habitTxt);
+        habitTxt.setText(historyName);
+
+        RecyclerView recyclerView = findViewById(R.id.timestampRecycler);
         recyclerView.setHasFixedSize(true);
 
-        TimestampsAdapter historiesAdapter = new TimestampsAdapter(history.timestamps, this);
+        TimestampsAdapter timestampsAdapter = new TimestampsAdapter(history.timestamps, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(historiesAdapter);
+        recyclerView.setAdapter(timestampsAdapter);
     }
 
     static class TimestampsAdapter extends RecyclerView.Adapter<TimestampsAdapter.ViewHolder> {
@@ -57,7 +60,7 @@ public class HistoryView extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            holder.fillForm(timestamps.get(position));
+            holder.fillForm(this.timestamps.get(position));
         }
 
         @Override
@@ -66,7 +69,6 @@ public class HistoryView extends AppCompatActivity {
         }
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
-
 
             private final TextView timestamp;
             private final TextView timestampStatus;
@@ -78,13 +80,13 @@ public class HistoryView extends AppCompatActivity {
             }
 
             public void fillForm(History.Time time) {
-                this.timestamp.setText(time.getLocalTime().toString());
+                this.timestamp.setText(time.getLocalTime());
 
                 if (time.success) {
                     this.timestampStatus.setTextColor(Color.parseColor("#4CAF50"));
                     this.timestampStatus.setText("Success");
                 } else {
-                    this.timestampStatus.setTextColor(Color.parseColor("##F44336"));
+                    this.timestampStatus.setTextColor(Color.parseColor("#F44336"));
                     this.timestampStatus.setText("Cancelled");
                 }
             }

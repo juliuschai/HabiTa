@@ -29,6 +29,8 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        NotificationHelper.createNotificationChannel(this);
+
         habits = habitManager.get(this);
 
         RecyclerView recyclerView = findViewById(R.id.recycler);

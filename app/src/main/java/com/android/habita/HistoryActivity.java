@@ -28,8 +28,10 @@ public class HistoryActivity extends AppCompatActivity implements HistoryActivit
         this.histories = HistoryManager.readFromJSON(this);
 
         this.historiesArr = new History[histories.size()];
+        int i = 0;
         for (History history : histories.values()) {
-            historiesArr[0] = history;
+            historiesArr[i] = history;
+            i++;
         }
 
         RecyclerView recyclerView = findViewById(R.id.historyRecycler);
@@ -40,24 +42,24 @@ public class HistoryActivity extends AppCompatActivity implements HistoryActivit
         recyclerView.setAdapter(historiesAdapter);
     }
 
-    public void onHistoryItemClicked(int pos) {
+    public void onHistoryItemClicked(Context context, int pos) {
         Intent intent = new Intent(this, HistoryView.class);
         Bundle bundle = new Bundle();
         bundle.putString("name", this.historiesArr[pos].name);
         intent.putExtras(bundle);
 
-        startActivity(intent);
+        context.startActivity(intent);
 
     }
 
     protected static class HistoriesAdapter extends RecyclerView.Adapter<HistoriesAdapter.ViewHolder>{
 
-        private final HistoryActivityIListener mListener;
         private final History[] historiesArr;
+        private final Context context;
 
         public HistoriesAdapter(History[] historiesArr, Context context) {
             this.historiesArr = historiesArr;
-            this.mListener = (HistoryActivityIListener) context;
+            this.context = context;
         }
 
         @NonNull
@@ -66,7 +68,7 @@ public class HistoryActivity extends AppCompatActivity implements HistoryActivit
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.history_item, parent, false);
 
-            return new ViewHolder(view, mListener);
+            return new ViewHolder(view, context);
         }
 
         @Override
@@ -84,27 +86,31 @@ public class HistoryActivity extends AppCompatActivity implements HistoryActivit
             private final TextView habitSuccess;
             private final TextView habitCancel;
             private final HistoryActivityIListener mListener;
+            private final Context context;
 
-            public ViewHolder(View view, HistoryActivityIListener mListener) {
+            public ViewHolder(View view, Context context) {
                 super(view);
-                this.mListener = mListener;
-                // Define click listener for the ViewHolder's View
+                this.context = context;
+                this.mListener = (HistoryActivityIListener) context;
 
                 habitName = view.findViewById(R.id.habitName);
                 habitSuccess = view.findViewById(R.id.habitSuccess);
                 habitCancel = view.findViewById(R.id.habitCancel);
+
+                // Define click listener for the ViewHolder's View
+                view.setOnClickListener(this);
             }
 
             public void fillForm(History history) {
                 habitName.setText(history.name);
-                habitSuccess.setText(history.getSuccess());
-                habitCancel.setText(history.getCancel());
+                habitSuccess.setText(String.valueOf(history.getSuccess()));
+                habitCancel.setText(String.valueOf(history.getCancel()));
 
             }
 
             @Override
             public void onClick(View v) {
-                mListener.onHistoryItemClicked(getLayoutPosition());
+                mListener.onHistoryItemClicked(context, getLayoutPosition());
             }
         }
     }
@@ -112,6 +118,6 @@ public class HistoryActivity extends AppCompatActivity implements HistoryActivit
 }
 
 interface HistoryActivityIListener {
-    void onHistoryItemClicked(int pos);
+    void onHistoryItemClicked(Context context, int pos);
 }
 

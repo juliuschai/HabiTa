@@ -47,15 +47,8 @@ public class History {
             this.success = success;
         }
 
-        public LocalDateTime getLocalTime() {
-            DateTimeFormatter formatter = DateTimeFormat.longDateTime();
-            return formatter.parseLocalDateTime(localTime);
+        public String getLocalTime() {
+            return localTime;
         }
-
-        public void setLocalTime(LocalDateTime localTime) {
-            DateTimeFormatter formatter = DateTimeFormat.longDateTime();
-            this.localTime = formatter.print(localTime);
-        }
-
     }
 }

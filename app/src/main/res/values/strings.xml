@@ -48,4 +48,7 @@
     <string name="title_activity_history_view">HistoryView</string>
     <string name="addBtn">Add</string>
     <string name="open_history_view">Open History View</string>
+    <string name="channel_name">Reminder</string>
+    <string name="channel_description">Habit reminder notifications</string>
+    <string name="arrow_right"><![CDATA[>]]></string>
 </resources>

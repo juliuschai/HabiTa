@@ -5,13 +5,12 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,16 +36,23 @@ public class HistoryManager {
     }
 
     public static Map<String, History> readFromJSON(Context context) {
-        Gson gson = new Gson();
-        JsonReader reader;
         Map<String, History> histories;
         try {
-            File file = new File(context.getApplicationInfo().dataDir, FILENAME);
-            reader = new JsonReader(new FileReader(file));
-            histories = gson.fromJson(reader, new TypeToken<Map<String, History>>(){}.getType());
-        } catch (FileNotFoundException e) {
+            Gson gson = new Gson();
+            FileInputStream fis = context.openFileInput(FILENAME);
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader bufferedReader = new BufferedReader(isr);
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                sb.append(line);
+            }
+            String json = sb.toString();
+            histories = gson.fromJson(json, new TypeToken<Map<String, History>>(){}.getType());
+        } catch (IOException e) {
             histories = null;
         }
+
         if (histories == null) histories = new HashMap<>();
 
         return histories;
@@ -54,12 +60,18 @@ public class HistoryManager {
 
     public static void saveToJSON(Map<String, History> histories, Context context) {
         try {
-            File file = new File(context.getApplicationInfo().dataDir, FILENAME);
-            file.getParentFile().mkdirs();
-            file.createNewFile();
-            FileWriter writer = new FileWriter(file);
             Gson gson = new GsonBuilder().create();
-            gson.toJson(histories, writer);
+            String s = gson.toJson(histories);
+            FileOutputStream outputStream = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
+            outputStream.write(s.getBytes());
+            outputStream.close();
+//
+//            File file = new File(context.getApplicationInfo().dataDir, FILENAME);
+//            file.getParentFile().mkdirs();
+//            file.createNewFile();
+//            FileWriter writer = new FileWriter(file);
+//            Gson gson = new GsonBuilder().create();
+//            gson.toJson(histories, writer);
         } catch (IOException e) {
             e.printStackTrace();
         }

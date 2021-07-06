@@ -5,9 +5,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 public class AlarmReciever extends BroadcastReceiver {
     public int NOTIFICATION_ID = 0;
@@ -28,23 +28,22 @@ public class AlarmReciever extends BroadcastReceiver {
         Bundle newExtras = new Bundle();
         newExtras.putString("name", habitName);
 
-        Intent successIntent = new Intent(context, SuccessActivity.class);
+        Intent successIntent = new Intent(context, SuccessReceiver.class);
         successIntent.putExtras(newExtras);
         PendingIntent successPendingIntent = PendingIntent.getBroadcast(
                 context, PENDINGINTENT_ID + 1, successIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Intent cancelIntent = new Intent(context, CancelActivity.class);
+        Intent cancelIntent = new Intent(context, CancelReceiver.class);
         cancelIntent.putExtras(newExtras);
         PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(
                 context, PENDINGINTENT_ID + 2, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Toast.makeText(context, "Before " + habitName + "notification triggered", Toast.LENGTH_LONG).show();
         //Build the notification
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, context.getString(R.string.channel_name))
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle(context.getString(R.string.notification_title))
                 .setContentText("Habit " + habitName + " reminder!")
-                .setContentIntent(successPendingIntent)
+//                .setContentIntent(successPendingIntent)
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
@@ -53,7 +52,9 @@ public class AlarmReciever extends BroadcastReceiver {
                 .addAction(R.drawable.ic_launcher_foreground, context.getString(R.string.cancel),
                         cancelPendingIntent);
         builder.build();
-        Toast.makeText(context, "After " + habitName + "notification triggered", Toast.LENGTH_LONG).show();
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+        notificationManager.notify(NOTIFICATION_ID, builder.build());
+
     }
 
 /*
@@ -76,12 +77,12 @@ public class AlarmReciever extends BroadcastReceiver {
 //                context, PENDINGINTENT_ID, contentIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         //Prepare success and cancel PendingIntent
-        Intent successIntent = new Intent(context, SuccessActivity.class);
+        Intent successIntent = new Intent(context, SuccessReceiver.class);
         successIntent.putExtras(newExtras);
         PendingIntent successPendingIntent = PendingIntent.getBroadcast(
                 context, PENDINGINTENT_ID + 1, successIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Intent cancelIntent = new Intent(context, CancelActivity.class);
+        Intent cancelIntent = new Intent(context, CancelReceiver.class);
         successIntent.putExtras(newExtras);
         PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(
                 context, PENDINGINTENT_ID + 2, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
